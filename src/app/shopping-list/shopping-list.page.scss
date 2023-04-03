@@ -1,0 +1,32 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  margin-bottom: 5rem;
+
+  .panel-container{
+    position: sticky;
+    top: 0;
+    display: flex;
+    background-color: white;
+    justify-content: space-evenly;
+    align-items: center;
+    column-gap: .5rem;
+    padding: 1rem .5rem;
+    z-index: 1;
+    box-shadow: 0px 0px 3px gray;
+  }
+
+  .value-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    text-align: end;
+    gap: 0.4rem;
+  }
+}
+
+.item {
+  --ripple-color: red;
+  --background-hover: red;
+}

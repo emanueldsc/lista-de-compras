@@ -1,0 +1,30 @@
+:host {
+  border: 1px dashed orange;
+  padding: 10px;
+  width: 100%;
+
+  h1, p {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    color: orange;
+  }
+
+  h1 {
+    font-size: 0.5rem;
+    font-weight: bold;
+    justify-content: center;
+    column-gap: 0.5rem;
+
+    ion-icon {
+      font-size: 1rem;
+    }
+  }
+
+  p {
+    font-size: 0.8rem;
+    justify-content: center;
+    font-weight: lighter;
+  }
+
+}

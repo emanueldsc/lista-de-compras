@@ -2,11 +2,12 @@ import { Component, Input } from '@angular/core';
 import { Message } from '../services/data.service';
 
 @Component({
-  selector: 'app-message',
-  templateUrl: './message.component.html',
-  styleUrls: ['./message.component.scss'],
+  selector: 'app-list',
+  templateUrl: './list.component.html',
+  styleUrls: ['./list.component.scss'],
 })
-export class MessageComponent {
+export class ListComponent {
+
   @Input() message?: Message;
 
   isIos() {

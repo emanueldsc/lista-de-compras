@@ -1,0 +1,118 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ data | date: 'dd/MM/yyyy' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container">
+    <section class="panel-container">
+      <app-panel
+        [title]="'Orçamento'"
+        [icon]="'wallet-outline'"
+        [budget]="budget"
+      ></app-panel>
+      <app-panel
+        [title]="'SubTotal'"
+        [icon]="'cash-outline'"
+        [budget]="subTotal"
+      ></app-panel>
+      <app-panel
+        [title]="'Total'"
+        [icon]="'cart-outline'"
+        [budget]="total"
+      ></app-panel>
+    </section>
+
+    <section class="list-container">
+      <ion-list style="padding-top: 0">
+        <ion-item
+          lines="full"
+          *ngFor="let item of items; let i = index"
+          button
+          class="item"
+          detail="false"
+          (click)="edit(item, i)"
+        >
+          <ion-label>
+            <p>{{ item.nome }}</p>
+            <p class="value-item">
+              <span>{{ item.quantity }}</span>
+              <ion-icon name="close" />
+              <span>
+                {{ item.price | currency : 'BRL' }} = {{ (item.quantity *
+                item.price) | currency : 'BRL' }}
+              </span>
+            </p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </section>
+  </div>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button id="open-modal" (click)="modalIsOpen = true" expand="block">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-modal
+    #modal
+    [isOpen]="modalIsOpen"
+    trigger="open-modal"
+    [presentingElement]="presentingElement"
+  >
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start" *ngIf="indexItemSelecionado !== null">
+            <ion-button (click)="removeItem(indexItemSelecionado)">
+              <ion-icon name="trash"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+
+          <ion-title>
+            <p style="text-align: center">{{ nomeItem }}</p>
+          </ion-title>
+
+          <ion-buttons slot="end">
+            <ion-button (click)="closeModal()">
+              <ion-icon name="close-circle-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <form [formGroup]="shoppingForm" (ngSubmit)="addNewItem()">
+          <ion-item>
+            <ion-label position="floating">Item</ion-label>
+            <ion-input type="text" formControlName="nome"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Quantity</ion-label>
+            <ion-input type="number" formControlName="quantity"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Price</ion-label>
+            <ion-input type="number" formControlName="price"></ion-input>
+          </ion-item>
+
+          <ion-button
+            id="open-modal"
+            [disabled]="!shoppingForm.valid"
+            expand="block"
+            type="submit"
+            [strong]="true"
+          >
+            Confirmar
+          </ion-button>
+        </form>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>
