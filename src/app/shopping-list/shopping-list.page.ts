@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CheckboxCustomEvent, IonModal } from '@ionic/angular';
+import { CheckboxCustomEvent, IonModal, ModalController } from '@ionic/angular';
+import { SetBudgetModalComponent } from '../set-budget-modal/set-budget-modal.component';
+import { SetItemModalComponent } from '../set-item-modal/set-item-modal.component';
 
 interface Item {
   nome: string,
@@ -21,16 +23,15 @@ export class ShoppingListPage implements OnInit {
 
   private _data?: Date
 
-  budget = 450.50
-
+  budget: number = 0
   shoppingForm!: FormGroup
-
   items: Item[] = []
 
   modalIsOpen: boolean = false
+  modalBudget: boolean = false
 
   get subTotal(): number {
-    const subTotal: number = this.items.reduce((prev, current) => prev + (current.price * current.quantity) ,0)
+    const subTotal: number = this.items.reduce((prev, current) => prev + (current.price * current.quantity), 0)
     return subTotal
   }
 
@@ -39,11 +40,11 @@ export class ShoppingListPage implements OnInit {
   }
 
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private modalController: ModalController
   ) { }
 
   ngOnInit() {
-    this.items = new Array<Item | null>(30).fill(null).map((_, i) => ({ nome: `Nome ${i}`, price: 3.25, quantity: i }))
     this.shoppingForm = this.fb.group({
       nome: this.fb.control(null, [Validators.required]),
       price: this.fb.control(null, [Validators.required]),
@@ -51,13 +52,28 @@ export class ShoppingListPage implements OnInit {
     })
   }
 
-  addNewItem(): void {
-    const newItem = this.shoppingForm.value
-    if (this.shoppingForm.valid) {
-      this.items.push(newItem)
-      this.shoppingForm.reset()
-      this.closeModal()
-    }
+  async openModalItem(): Promise<void> {
+    const modal = await this.modalController.create({
+      component: SetItemModalComponent
+    })
+    modal.onDidDismiss().then((item) => {
+      if (item?.data) {
+        this.items.push(item.data)
+      }
+    })
+    return await modal.present();
+  }
+
+  async openModalBudget(): Promise<void> {
+    const modal = await this.modalController.create({
+      component: SetBudgetModalComponent
+    })
+    modal.onDidDismiss().then((item) => {
+      if (item?.data) {
+        this.items.push(item.data)
+      }
+    })
+    return await modal.present();
   }
 
   onTermsChanged(event: Event) {
@@ -65,25 +81,26 @@ export class ShoppingListPage implements OnInit {
     this.canDismiss = ev.detail.checked;
   }
 
-  indexItemSelecionado: number | null = null
+  indexItemSelected: number | null = null
   edit(item: Item, index: number): void {
-    this.indexItemSelecionado = index
+    this.indexItemSelected = index
     this.shoppingForm.setValue(item)
     this.modalIsOpen = true
   }
 
   removeItem(index: number): void {
     this.items.splice(index, 1)
-    this.closeModal()
   }
+
+
 
   closeModal(): void {
     this.modalIsOpen = false
-    this.indexItemSelecionado = null
+    this.indexItemSelected = null
   }
 
   get nomeItem(): string {
-    const nome:string =  this.shoppingForm.get('nome')?.value
+    const nome: string = this.shoppingForm.get('nome')?.value
     return nome ?? 'Novo item'
   }
 

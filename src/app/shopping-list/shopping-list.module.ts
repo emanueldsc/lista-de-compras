@@ -8,6 +8,8 @@ import { ShoppingListPageRoutingModule } from './shopping-list-routing.module';
 
 import { ShoppingListPage } from './shopping-list.page';
 import { PanelComponent } from './panel/panel.component';
+import { SetBudgetModalComponent } from '../set-budget-modal/set-budget-modal.component';
+import { SetItemModalComponent } from '../set-item-modal/set-item-modal.component';
 
 @NgModule({
   imports: [
@@ -17,6 +19,11 @@ import { PanelComponent } from './panel/panel.component';
     IonicModule,
     ShoppingListPageRoutingModule
   ],
-  declarations: [ShoppingListPage, PanelComponent]
+  declarations: [
+    ShoppingListPage,
+    PanelComponent,
+    SetBudgetModalComponent,
+    SetItemModalComponent
+  ]
 })
 export class ShoppingListPageModule { }

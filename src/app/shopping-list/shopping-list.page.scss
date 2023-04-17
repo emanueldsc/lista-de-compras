@@ -30,3 +30,7 @@
   --ripple-color: red;
   --background-hover: red;
 }
+
+:host ::ng-deep .remove-option * {
+  color: white;
+}
